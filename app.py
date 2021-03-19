@@ -32,11 +32,13 @@ def post_game():
     while gamesdb.find_one({'id': game_id}) is not None:
         game_id = str(uuid.uuid4())[:8]
     params = request.get_json()
-    gamesdb.insert_one({
+    doc = {
         "id": game_id,
-        "n": params.get('name'),
         "m": params.get('moves')
-    })
+    }
+    if params.get('name') is not None:
+        doc["n"]: params.get('name')
+    gamesdb.insert_one(doc)
     return jsonify(game_id)
 
 GAME_KEY_NAMES = {
@@ -51,7 +53,7 @@ def return_game(game_id=None):
             return Response(status=404)
         # formate dictionary names
         for key, value in GAME_KEY_NAMES.items():
-            game[value] = game[key]
+            game[value] = game.get(key)
             del game[key]
         return json.dumps(game, default=str)
 
