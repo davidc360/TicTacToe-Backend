@@ -38,7 +38,7 @@ def post_game():
     }
     name = params.get('name')
     if name is not None and len(name) > 0:
-        doc["n"] = params.get('name')
+        doc["n"] = params.get('name')[:10]
     gamesdb.insert_one(doc)
     return jsonify(game_id)
 
