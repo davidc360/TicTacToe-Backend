@@ -53,8 +53,7 @@ def return_game(game_id=None):
             return Response(status=404)
         # formate dictionary names
         for key, value in GAME_KEY_NAMES.items():
-            game[value] = game.get(key)
-            del game[key]
+            game[value] =  game.pop(key, None)
         return json.dumps(game, default=str)
 
 if __name__ == '__main__':
